@@ -1,6 +1,8 @@
 import { useState } from 'react';
 // В реакте для dispatch используется хук
 import { useDispatch } from 'react-redux';
+// Для уникального id
+import { v4 as uuidv4 } from 'uuid';
 // Импорт действия
 import { addBook } from '../../redux/Books/actionCreators';
 import './BookForm.css';
@@ -20,6 +22,7 @@ const BookForm = () => {
       const book = {
         title,
         author,
+        id: uuidv4(),
       };
       // Отправляем изменения
       dispatch(addBook(book));

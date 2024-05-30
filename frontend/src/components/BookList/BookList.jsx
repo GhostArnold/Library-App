@@ -18,7 +18,8 @@ const BookList = () => {
               book,
               i // Итерация по массиву книг
             ) => (
-              <li key={i}>
+              // Делаем уникальный ключ с помощью свойства из объекта books, свойство которого мы указываем в BookForm
+              <li key={book.id}>
                 {/* Уникальный ключ для каждой книги */}
                 <div className="book-info">
                   {++i}. {book.title} by <strong>{book.author}</strong>{' '}

@@ -1,18 +1,28 @@
 import { useState } from 'react';
+// В реакте для dispatch используется хук
+import { useDispatch } from 'react-redux';
+// Импорт действия
+import { addBook } from '../../redux/Books/actionCreators';
 import './BookForm.css';
 const BookForm = () => {
   // Название книги
   const [title, setTitle] = useState('');
   //   Автор книги
   const [author, setAuthor] = useState('');
+  // Резултат вызова useDispatch
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     // Чтобы браузер не выполнял действие по умолчанию (не перезагружал страницу)
     e.preventDefault();
-
     if (title && author) {
-      // dispatch action
-      console.log(title, author);
+      // Объект для payload
+      const book = {
+        title,
+        author,
+      };
+      // Отправляем изменения
+      dispatch(addBook(book));
       //   Делаем, чтобы после субмита состояние обнулялось
       setTitle('');
       setAuthor('');

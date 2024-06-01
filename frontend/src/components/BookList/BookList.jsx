@@ -29,7 +29,8 @@ const BookList = () => {
                 {/* Уникальный ключ для каждой книги */}
                 <div className="book-info">
                   {/* Вывод информации о книге: название и автор */}
-                  {++i}. {book.title} by <strong>{book.author}</strong>{' '}
+                  {++i}. {book.title} by <strong>{book.author}</strong> -{' '}
+                  {book.year}{' '}
                 </div>
                 <div className="book-actions">
                   <button onClick={() => handleDeleteBook(book.id)}>

@@ -1,8 +1,14 @@
-import { useSelector } from 'react-redux'; // Импорт хука useSelector из библиотеки react-redux
+import { useDispatch, useSelector } from 'react-redux'; // Импорт хука useSelector из библиотеки react-redux
+import { deleteBook } from '../../redux/Books/actionCreators';
 import './BookList.css'; // Импорт стилей компонента
 
 const BookList = () => {
   const books = useSelector((state) => state.books); // Использование хука useSelector для получения состояния книг из Redux
+  const dispatch = useDispatch();
+  const handleDeleteBook = (id) => {
+    console.log(deleteBook(id));
+    dispatch(deleteBook(id));
+  };
 
   return (
     <div className="app-block book-list">
@@ -22,8 +28,13 @@ const BookList = () => {
               <li key={book.id}>
                 {/* Уникальный ключ для каждой книги */}
                 <div className="book-info">
-                  {++i}. {book.title} by <strong>{book.author}</strong>{' '}
                   {/* Вывод информации о книге: название и автор */}
+                  {++i}. {book.title} by <strong>{book.author}</strong>{' '}
+                </div>
+                <div className="book-actions">
+                  <button onClick={() => handleDeleteBook(book.id)}>
+                    Delete
+                  </button>
                 </div>
               </li>
             )

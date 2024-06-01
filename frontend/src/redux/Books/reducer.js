@@ -1,4 +1,4 @@
-import * as actionTypes from './actionTypes';
+import * as actionTypes from './actionTypes'; // Импортируйте actionTypes из соответствующего файла
 
 const initialState = [];
 
@@ -7,8 +7,12 @@ const booksReducer = (state = initialState, action) => {
     case actionTypes.ADD_BOOK:
       return [...state, action.payload];
 
+    case actionTypes.DELETE_BOOK:
+      return state.filter((book) => book.id !== action.payload);
+
     default:
       return state;
   }
 };
+
 export default booksReducer;

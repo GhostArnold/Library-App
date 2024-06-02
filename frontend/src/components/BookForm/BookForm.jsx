@@ -1,12 +1,11 @@
 import { useState } from 'react';
 // В реакте для dispatch используется хук
 import { useDispatch } from 'react-redux';
-// Для уникального id
-import { v4 as uuidv4 } from 'uuid';
 // Импорт действия
 import { addBook } from '../../redux/Books/actionCreators';
 // json книги
 import booksData from '../../data/books.json';
+import createBookWithId from '../../utils/createBookWithId';
 import './BookForm.css';
 const BookForm = () => {
   // Название книги
@@ -24,13 +23,8 @@ const BookForm = () => {
     // Создаём переменную с рандомным элементом объекта
     const randomBook = booksData[randomIndex];
 
-    // Мы полностью инициализируем здесь элементы объекта
-    const randomBookWithID = {
-      ...randomBook,
-      isFavorite: false,
-      // Уникальный id
-      id: uuidv4(),
-    };
+    // Функция для объекта
+    const randomBookWithID = createBookWithId(randomBook);
 
     dispatch(addBook(randomBookWithID));
   };
@@ -39,12 +33,7 @@ const BookForm = () => {
     e.preventDefault();
     if (title && author) {
       // Объект для payload
-      const book = {
-        title,
-        author,
-        isFavorite: false,
-        id: uuidv4(),
-      };
+      const book = createBookWithId({ title, author });
       // Отправляем изменения
       dispatch(addBook(book));
       //   Делаем, чтобы после субмита состояние обнулялось

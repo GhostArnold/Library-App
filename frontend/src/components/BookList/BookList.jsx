@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'; // Импорт хука useSelector из библиотеки react-redux
-import { deleteBook } from '../../redux/Books/actionCreators';
+// Иконки для избранного
+import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
+import { deleteBook, toggleFovorite } from '../../redux/Books/actionCreators';
 import './BookList.css'; // Импорт стилей компонента
 
 const BookList = () => {
@@ -8,6 +10,10 @@ const BookList = () => {
   const handleDeleteBook = (id) => {
     console.log(deleteBook(id));
     dispatch(deleteBook(id));
+  };
+  // Избранное
+  const handleToggleFavorite = (id) => {
+    dispatch(toggleFovorite(id));
   };
 
   return (
@@ -33,6 +39,13 @@ const BookList = () => {
                   {book.year}{' '}
                 </div>
                 <div className="book-actions">
+                  <span onClick={() => handleToggleFavorite(book.id)}>
+                    {book.isFavorite ? (
+                      <BsBookmarkStarFill className="star-icon" />
+                    ) : (
+                      <BsBookmarkStar className="star-icon" />
+                    )}
+                  </span>
                   <button onClick={() => handleDeleteBook(book.id)}>
                     Delete
                   </button>

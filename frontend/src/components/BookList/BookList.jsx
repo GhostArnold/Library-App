@@ -5,6 +5,7 @@ import { deleteBook, toggleFovorite } from '../../redux/Books/actionCreators';
 import {
   selectTitleFilter,
   selectAuthorFilter,
+  selectOnlyFavoriteFilter,
 } from '../../redux/slices/filterSlice';
 import './BookList.css'; // Импорт стилей компонента
 
@@ -14,6 +15,7 @@ const BookList = () => {
   // Фильтрация. Скобки не пишем потому-что калбэк вызывается автоматически
   const titleFilter = useSelector(selectTitleFilter);
   const authorFilter = useSelector(selectAuthorFilter);
+  const onlyFavoriteFilter = useSelector(selectOnlyFavoriteFilter);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
     console.log(deleteBook(id));
@@ -27,7 +29,9 @@ const BookList = () => {
   const filteredBooks = books.filter(
     (book) =>
       book.title.toLowerCase().includes(titleFilter.toLowerCase()) &&
-      book.author.toLowerCase().includes(authorFilter.toLowerCase())
+      book.author.toLowerCase().includes(authorFilter.toLowerCase()) &&
+      // Тернарный оператор обязательно в скобках
+      (onlyFavoriteFilter ? book.isFavorite : true)
   );
 
   return (

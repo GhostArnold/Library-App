@@ -22,6 +22,7 @@ const BookList = () => {
 
   const filteredBooks = books.filter((book) => {
     const matchesTitle = book.title
+      // Приводим и название книги, и введённую строку к нижнему регистру, чтобы сравнение было нечувствительно к регистру
       .toLowerCase()
       // Проверяем, содержит ли название книги введённую строку (также в нижнем регистре)
       .includes(titleFilter.toLowerCase());

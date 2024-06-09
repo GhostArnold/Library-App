@@ -2,7 +2,10 @@ import { useDispatch, useSelector } from 'react-redux'; // Импорт хука
 // Иконки для избранного
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { deleteBook, toggleFovorite } from '../../redux/Books/actionCreators';
-import { selectTitleFilter } from '../../redux/slices/filterSlice';
+import {
+  selectTitleFilter,
+  selectAuthorFilter,
+} from '../../redux/slices/filterSlice';
 import './BookList.css'; // Импорт стилей компонента
 
 const BookList = () => {
@@ -10,6 +13,7 @@ const BookList = () => {
   const books = useSelector((state) => state.books);
   // Фильтрация. Скобки не пишем потому-что калбэк вызывается автоматически
   const titleFilter = useSelector(selectTitleFilter);
+  const authorFilter = useSelector(selectAuthorFilter);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
     console.log(deleteBook(id));
@@ -20,15 +24,11 @@ const BookList = () => {
     dispatch(toggleFovorite(id));
   };
 
-  const filteredBooks = books.filter((book) => {
-    const matchesTitle = book.title
-      // Приводим и название книги, и введённую строку к нижнему регистру, чтобы сравнение было нечувствительно к регистру
-      .toLowerCase()
-      // Проверяем, содержит ли название книги введённую строку (также в нижнем регистре)
-      .includes(titleFilter.toLowerCase());
-    console.log({ title: book.title, matchesTitle });
-    return matchesTitle;
-  });
+  const filteredBooks = books.filter(
+    (book) =>
+      book.title.toLowerCase().includes(titleFilter.toLowerCase()) &&
+      book.author.toLowerCase().includes(authorFilter.toLowerCase())
+  );
 
   return (
     <div className="app-block book-list">

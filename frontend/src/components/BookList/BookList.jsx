@@ -2,10 +2,14 @@ import { useDispatch, useSelector } from 'react-redux'; // Импорт хука
 // Иконки для избранного
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { deleteBook, toggleFovorite } from '../../redux/Books/actionCreators';
+import { selectTitleFilter } from '../../redux/slices/filterSlice';
 import './BookList.css'; // Импорт стилей компонента
 
 const BookList = () => {
-  const books = useSelector((state) => state.books); // Использование хука useSelector для получения состояния книг из Redux
+  // Использование хука useSelector для получения состояния книг из Redux
+  const books = useSelector((state) => state.books);
+  // Фильтрация. Скобки не пишем потому-что калбэк вызывается автоматически
+  const titleFilter = useSelector(selectTitleFilter);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
     console.log(deleteBook(id));
@@ -16,6 +20,15 @@ const BookList = () => {
     dispatch(toggleFovorite(id));
   };
 
+  const filteredBooks = books.filter((book) => {
+    const matchesTitle = book.title
+      .toLowerCase()
+      // Проверяем, содержит ли название книги введённую строку (также в нижнем регистре)
+      .includes(titleFilter.toLowerCase());
+    console.log({ title: book.title, matchesTitle });
+    return matchesTitle;
+  });
+
   return (
     <div className="app-block book-list">
       {' '}
@@ -25,7 +38,7 @@ const BookList = () => {
       ) : (
         // Вывод списка книг, если они есть
         <ul>
-          {books.map(
+          {filteredBooks.map(
             (
               book,
               i // Итерация по массиву книг

@@ -12,18 +12,12 @@ const filterSlice = createSlice({
   reducers: {
     // Описание редьюсера, который будет обновлять состояние
     setTitleFilter: (state, action) => {
-      // Возвращаем обновленное состояние
-      return {
-        ...state,
-        title: action.payload, // Обновляем поле title из payload экшена
-      };
+      // Благодаря библиотеки immer
+      state.title = action.payload;
     },
   },
 });
 
 export const { setTitleFilter } = filterSlice.actions;
-
-// console.log(filterSlice.actions);
-// console.log(filterSlice.actions.setTitleFilter('type'));
-// Экспортируем редьюсер для включения в store
+export const selectTitleFilter = (state) => state.filter.title;
 export default filterSlice.reducer;

@@ -2,13 +2,23 @@ import { useDispatch, useSelector } from 'react-redux'; // Импорт хука
 // Иконки для избранного
 import { BsBookmarkStarFill, BsBookmarkStar } from 'react-icons/bs';
 import { deleteBook, toggleFovorite } from '../../redux/Books/actionCreators';
+import {
+  selectTitleFilter,
+  selectAuthorFilter,
+  selectOnlyFavoriteFilter,
+} from '../../redux/slices/filterSlice';
 import './BookList.css'; // Импорт стилей компонента
 
 const BookList = () => {
-  const books = useSelector((state) => state.books); // Использование хука useSelector для получения состояния книг из Redux
+  // Использование хука useSelector для получения состояния книг из Redux
+  const books = useSelector((state) => state.books);
+  // Фильтрация. Скобки не пишем потому-что калбэк вызывается автоматически
+  const titleFilter = useSelector(selectTitleFilter);
+  const authorFilter = useSelector(selectAuthorFilter);
+  const onlyFavoriteFilter = useSelector(selectOnlyFavoriteFilter);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
-    console.log(deleteBook(id));
+    // console.log(deleteBook(id));
     dispatch(deleteBook(id));
   };
   // Избранное
@@ -16,6 +26,28 @@ const BookList = () => {
     dispatch(toggleFovorite(id));
   };
 
+  const filteredBooks = books.filter(
+    (book) =>
+      book.title.toLowerCase().includes(titleFilter.toLowerCase()) &&
+      book.author.toLowerCase().includes(authorFilter.toLowerCase()) &&
+      // Тернарный оператор обязательно в скобках
+      (onlyFavoriteFilter ? book.isFavorite : true)
+  );
+  const highlightMatch = (text, filter) => {
+    if (!filter) return text;
+    const regex = new RegExp(`(${filter})`, 'gi');
+    console.log(regex);
+    return text.split(regex).map((substring, i) => {
+      if (substring.toLowerCase() === filter.toLowerCase()) {
+        return (
+          <span key={i} className="highlight">
+            {substring}
+          </span>
+        );
+      }
+      return substring;
+    });
+  };
   return (
     <div className="app-block book-list">
       {' '}
@@ -25,7 +57,7 @@ const BookList = () => {
       ) : (
         // Вывод списка книг, если они есть
         <ul>
-          {books.map(
+          {filteredBooks.map(
             (
               book,
               i // Итерация по массиву книг
@@ -35,7 +67,8 @@ const BookList = () => {
                 {/* Уникальный ключ для каждой книги */}
                 <div className="book-info">
                   {/* Вывод информации о книге: название и автор */}
-                  {++i}. {book.title} by <strong>{book.author}</strong> -{' '}
+                  {++i}. {highlightMatch(book.title, titleFilter)} by{' '}
+                  <strong>{highlightMatch(book.author, authorFilter)}</strong> -{' '}
                   {book.year}{' '}
                 </div>
                 <div className="book-actions">

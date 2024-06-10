@@ -40,6 +40,8 @@ const Filter = () => {
             placeholder="Filter by title"
             onChange={handleTitleFilterChange}
           />
+        </div>
+        <div className="filter-group">
           <input
             type="text"
             placeholder="author"

@@ -18,7 +18,7 @@ const BookList = () => {
   const onlyFavoriteFilter = useSelector(selectOnlyFavoriteFilter);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
-    console.log(deleteBook(id));
+    // console.log(deleteBook(id));
     dispatch(deleteBook(id));
   };
   // Избранное
@@ -33,7 +33,21 @@ const BookList = () => {
       // Тернарный оператор обязательно в скобках
       (onlyFavoriteFilter ? book.isFavorite : true)
   );
-
+  const highlightMatch = (text, filter) => {
+    if (!filter) return text;
+    const regex = new RegExp(`(${filter})`, 'gi');
+    console.log(regex);
+    return text.split(regex).map((substring, i) => {
+      if (substring.toLowerCase() === filter.toLowerCase()) {
+        return (
+          <span key={i} className="highlight">
+            {substring}
+          </span>
+        );
+      }
+      return substring;
+    });
+  };
   return (
     <div className="app-block book-list">
       {' '}
@@ -53,7 +67,8 @@ const BookList = () => {
                 {/* Уникальный ключ для каждой книги */}
                 <div className="book-info">
                   {/* Вывод информации о книге: название и автор */}
-                  {++i}. {book.title} by <strong>{book.author}</strong> -{' '}
+                  {++i}. {highlightMatch(book.title, titleFilter)} by{' '}
+                  <strong>{highlightMatch(book.author, authorFilter)}</strong> -{' '}
                   {book.year}{' '}
                 </div>
                 <div className="book-actions">
